@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadLife", "BadLife\BadLife.csproj", "{F4C8235B-0FF0-44B1-9B87-6EC7FB7D0A45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "GameEngine\GameEngine.csproj", "{5D1A5A8E-BA4E-4F2A-BA4B-F2DAD6FD77FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4C8235B-0FF0-44B1-9B87-6EC7FB7D0A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C8235B-0FF0-44B1-9B87-6EC7FB7D0A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C8235B-0FF0-44B1-9B87-6EC7FB7D0A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C8235B-0FF0-44B1-9B87-6EC7FB7D0A45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D1A5A8E-BA4E-4F2A-BA4B-F2DAD6FD77FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D1A5A8E-BA4E-4F2A-BA4B-F2DAD6FD77FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D1A5A8E-BA4E-4F2A-BA4B-F2DAD6FD77FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D1A5A8E-BA4E-4F2A-BA4B-F2DAD6FD77FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {65CE980F-7698-4108-81E9-47A5CCAD7452}
+	EndGlobalSection
+EndGlobal
