@@ -9,8 +9,10 @@ namespace GameEngine
 {
 	public class Plant : Sprite
 	{
+		protected double Health { get; set; }
 		public Plant(Bitmap bitmap, int width, int height) : base(bitmap, width, height)
 		{
+			Health = 1;
 		}
 	}
 }

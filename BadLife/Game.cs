@@ -19,10 +19,14 @@ namespace BadLife
 		ICollection<Plant> Plants;
 
 		Bitmap BunnyBitmap;
-		Animal Bunny;
+		ICollection<Herbivorous> Bunnies;
 
-		//Bitmap FoxBitmap;
-		//Animal Fox;
+		Bitmap FoxBitmap;
+		Predator Fox;
+
+		ICollection<Sprite> Deads;
+
+		static Random random;
 
 		public Game()
 		{
@@ -41,16 +45,59 @@ namespace BadLife
 				p.Draw(g);
 			}
 
-			Bunny.Draw(g);
-			//Fox.Draw(g);
+			foreach (Herbivorous b in Bunnies)
+			{
+				b.Draw(g);
+			}
+			Fox.Draw(g);
 
 			CreateGraphics().DrawImage(backBuffer, GameMap);
 		}
 
 		public override void OnUpdate()
 		{
-			Bunny.Update(ref Plants);
-			//Fox.Update(Plants);
+			foreach (Herbivorous b in Bunnies)
+			{
+				b.Update(ref Plants);
+				if (b.Satiety <= 0) Deads.Add(b);
+			}
+			Fox.Update(ref Bunnies);
+
+			foreach (Sprite d in Deads)
+			{
+				if (Bunnies.Contains(d))
+					Bunnies.Remove((Herbivorous)d); 
+			}
+
+			Deads.Clear();
+
+			if (random.Next(10) == 0)
+			{
+				Plant p = new Plant(PlantBitmap, 32, 32);
+
+				int x = random.Next(16, 2048);
+				int y = random.Next(16, 2048);
+				p.SetLocation(x, y);
+
+				int frame = random.Next(7);
+				p.SetFrame(frame);
+				Plants.Add(p);
+			}
+
+			if (random.Next(20) == 0)
+			{
+				Herbivorous b = new Herbivorous(BunnyBitmap, 48, 48);
+
+				int x = random.Next(16, 2048) + 16;
+				int y = random.Next(16, 2048) + 16;
+				b.SetLocation(x, y);
+
+				int ind = random.Next(4);
+				b.SetFrameIndex(ind);
+				b.SetFPS(6);
+
+				Bunnies.Add(b);
+			}
 		}
 
 		public override void OnLoadContent()
@@ -66,7 +113,7 @@ namespace BadLife
 			int col = 2048 / tileSize;
 			TileMap = new TileMap(Tiles, row, col, tileSize);
 
-			Random random = new Random();
+			random = new Random();
 			for (int i = 0; i < row; i++)
 				for (int j = 0; j < col; j++)
 					if (random.Next(3) == 0)
@@ -76,34 +123,46 @@ namespace BadLife
 						else TileMap.SetTile(i, j, 2);
 					}
 
-			BunnyBitmap = new Bitmap(@"Images/bunny.png");
-			Bunny = new Animal(BunnyBitmap, 48, 48);
-			Bunny.SetFrameIndex(2);
-			Bunny.SetFrame(1);
-			Bunny.SetFPS(6);
-			Bunny.SetLocation(200, 200);
-
-			/*FoxBitmap = new Bitmap(@"Images/fox.png");
-			Fox = new Animal(FoxBitmap, 48, 48);
-			Fox.SetFrameIndex(2);
-			Fox.SetFrame(1);
-			Fox.SetFPS(6);
-			Fox.SetLocation(500, 500);*/
-
 			PlantBitmap = new Bitmap(@"Images/plants.png");
 			Plants = new List<Plant>();
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 500; i++)
 			{
 				Plant p = new Plant(PlantBitmap, 32, 32);
 
-				int x = random.Next(2032) + 16;
-				int y = random.Next(2032) + 16;
+				int x = random.Next(16, 2048);
+				int y = random.Next(16, 2048);
 				p.SetLocation(x, y);
 
 				int frame = random.Next(7);
 				p.SetFrame(frame);
 				Plants.Add(p);
 			}
+
+			BunnyBitmap = new Bitmap(@"Images/bunny.png");
+			Bunnies = new List<Herbivorous>();
+			for (int i = 0; i < 50; i++)
+			{
+				Herbivorous b = new Herbivorous(BunnyBitmap, 48, 48);
+
+				int x = random.Next(16, 2048) + 16;
+				int y = random.Next(16, 2048) + 16;
+				b.SetLocation(x, y);
+
+				int ind = random.Next(4);
+				b.SetFrameIndex(ind);
+				b.SetFPS(6);
+
+				Bunnies.Add(b);
+			}
+
+			FoxBitmap = new Bitmap(@"Images/fox.png");
+			Fox = new Predator(FoxBitmap, 48, 48);
+			Fox.SetFrameIndex(2);
+			Fox.SetFrame(1);
+			Fox.SetLocation(500, 500);
+			Fox.SetFPS(6);
+
+			Deads = new List<Sprite>();
 		}
 
 		public override void OnUnloadContent()

@@ -19,7 +19,7 @@ namespace GameEngine
 		public int Width { get; protected set; }
 		public int Height { get; protected set; }
 
-		protected bool Visible { get; set; }
+		public bool Visible { get; protected set; }
 
 		public int GetCenterX()
 		{
