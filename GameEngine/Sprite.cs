@@ -9,7 +9,7 @@ namespace GameEngine
 {
 	public abstract class Sprite : Layer
 	{
-		Bitmap Bitmap;
+		readonly Bitmap Bitmap;
 		protected int frameTime, currentFrame, frameIndex, frameLength;
 
 		public Sprite(Bitmap bitmap)
@@ -56,6 +56,7 @@ namespace GameEngine
 		public override void Draw(Graphics g)
 		{
 			if (!Visible) return;
+
 			Rectangle destRect = new Rectangle(X, Y, Width, Height);
 			Rectangle srcRect = new Rectangle(currentFrame * Width, frameIndex * Height, Width, Height);
 			g.DrawImage(Bitmap, destRect, srcRect, GraphicsUnit.Pixel);

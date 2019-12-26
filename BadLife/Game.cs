@@ -20,9 +20,9 @@ namespace BadLife
 
 		Bitmap BunnyBitmap;
 		Animal Bunny;
-		int index = 1;
-		int dx = -1;
-		int dy = 0;
+
+		//Bitmap FoxBitmap;
+		//Animal Fox;
 
 		public Game()
 		{
@@ -42,13 +42,15 @@ namespace BadLife
 			}
 
 			Bunny.Draw(g);
+			//Fox.Draw(g);
+
 			CreateGraphics().DrawImage(backBuffer, GameMap);
 		}
 
 		public override void OnUpdate()
 		{
-			Bunny.Move();
-
+			Bunny.Update(ref Plants);
+			//Fox.Update(Plants);
 		}
 
 		public override void OnLoadContent()
@@ -81,9 +83,16 @@ namespace BadLife
 			Bunny.SetFPS(6);
 			Bunny.SetLocation(200, 200);
 
+			/*FoxBitmap = new Bitmap(@"Images/fox.png");
+			Fox = new Animal(FoxBitmap, 48, 48);
+			Fox.SetFrameIndex(2);
+			Fox.SetFrame(1);
+			Fox.SetFPS(6);
+			Fox.SetLocation(500, 500);*/
+
 			PlantBitmap = new Bitmap(@"Images/plants.png");
 			Plants = new List<Plant>();
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				Plant p = new Plant(PlantBitmap, 32, 32);
 
