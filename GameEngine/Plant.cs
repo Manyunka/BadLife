@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace GameEngine
 {
-	public class Plant : Sprite
+	public class Plant : Creature
 	{
-		protected double Health { get; set; }
 		public Plant(Bitmap bitmap, int width, int height) : base(bitmap, width, height)
 		{
-			Health = 1;
+		}
+
+		public override void Update(ref ICollection<Creature> creatures, ref ICollection<MapObject> mapObjects)
+		{
 		}
 	}
 }

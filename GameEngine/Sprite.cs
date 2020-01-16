@@ -42,14 +42,14 @@ namespace GameEngine
 		public void SetFrame(int frame)
 		{
 			currentFrame = frame;
-			if (currentFrame < 0 || currentFrame > frameLength)
+			if (currentFrame < 0 || currentFrame >= frameLength)
 				currentFrame = 0;
 		}
 
 		public void SetFrameIndex(int index)
 		{
 			frameIndex = index;
-			if (frameIndex < 0 || frameIndex > Bitmap.Height / Height)
+			if (frameIndex < 0 || frameIndex >= Bitmap.Height / Height)
 				frameIndex = 0;
 		}
 

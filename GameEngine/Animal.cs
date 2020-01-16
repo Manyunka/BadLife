@@ -4,12 +4,12 @@ using System.Drawing;
 
 namespace GameEngine
 {
-	public abstract class Animal : Sprite
+	public abstract class Animal<T> : Creature
 	{
 		protected int dx = 0, dy = 0;
 		static protected Random random;
 
-		protected Sprite Goal;
+		protected Creature Goal;
 		protected int Speed { get; set; }
 		protected int searchRadius;
 		protected bool foodFound;
@@ -25,20 +25,16 @@ namespace GameEngine
 			switch (random.Next(3))
 			{
 				case 0:
-					dx = 0;
-					dy = -Speed;
+					MoveUp();
 					break;
 				case 1:
-					dx = Speed;
-					dy = 0;
+					MoveRight();
 					break;
 				case 2:
-					dx = -Speed;
-					dy = 0;
+					MoveLeft();
 					break;
 				case 3:
-					dx = 0;
-					dy = Speed;
+					MoveDown();
 					break;
 			}
 
@@ -48,16 +44,16 @@ namespace GameEngine
 			for (int i = 0; i < 1000; i++);
 		}
 
-		public void Update<T>(ref ICollection<T> gameObjects)
+		public override void Update(ref ICollection<Creature> creatures, ref ICollection<MapObject> mapObjects)
 		{
 			Satiety -= 0.0005;
-			if (Satiety <= 0.8)
+			if (Satiety <= 0.9)
 			{
 				if (Satiety <= 0) Visible = false;
 				if (currentFrame == 1)
 				{
-					SearchFood(ref gameObjects);
-					if (Goal != null) MoveToFood(ref gameObjects);
+					SearchFood(ref creatures);
+					if (Goal != null) MoveToFood(ref creatures);
 					else MoveRandom();
 				}
 				else NextFrame();
@@ -70,33 +66,29 @@ namespace GameEngine
 			Move();
 		}
 
-		private void Move()
+		protected void Move()
 		{
 			X += dx;
 			Y += dy;
 		}
 
-		private void MoveRandom()
+		protected void MoveRandom()
 		{
 			if (random.Next(100) == 0)
 			{
 				switch (random.Next(4))
 				{
 					case 0:
-						dx = 0;
-						dy = -Speed;
+						MoveUp();
 						break;
 					case 1:
-						dx = Speed;
-						dy = 0;
+						MoveRight();
 						break;
 					case 2:
-						dx = -Speed;
-						dy = 0;
+						MoveLeft();
 						break;
 					case 3:
-						dx = 0;
-						dy = Speed;
+						MoveDown();
 						break;
 					case 4:
 						dx = 0;
@@ -110,16 +102,13 @@ namespace GameEngine
 				switch (random.Next(3))
 				{
 					case 0:
-						dx = Speed;
-						dy = 0;
+						MoveRight();
 						break;
 					case 1:
-						dx = 0;
-						dy = Speed;
+						MoveDown();
 						break;
 					case 2:
-						dx = 0;
-						dy = -Speed;
+						MoveUp();
 						break;
 				}
 
@@ -129,16 +118,13 @@ namespace GameEngine
 				switch (random.Next(3))
 				{
 					case 0:
-						dx = -Speed;
-						dy = 0;
+						MoveLeft();
 						break;
 					case 1:
-						dx = 0;
-						dy = Speed;
+						MoveDown();
 						break;
 					case 2:
-						dx = 0;
-						dy = -Speed;
+						MoveUp();
 						break;
 				}
 			}
@@ -148,16 +134,13 @@ namespace GameEngine
 				switch (random.Next(3))
 				{
 					case 0:
-						dx = 0;
-						dy = Speed;
+						MoveDown();
 						break;
 					case 1:
-						dx = Speed;
-						dy = 0;
+						MoveRight();
 						break;
 					case 2:
-						dx = -Speed;
-						dy = 0;
+						MoveLeft();
 						break;
 				}
 
@@ -167,16 +150,13 @@ namespace GameEngine
 				switch (random.Next(3))
 				{
 					case 0:
-						dx = 0;
-						dy = -Speed;
+						MoveUp();
 						break;
 					case 1:
-						dx = Speed;
-						dy = 0;
+						MoveRight();
 						break;
 					case 2:
-						dx = -Speed;
-						dy = 0;
+						MoveLeft();
 						break;
 				}
 			}
@@ -191,8 +171,108 @@ namespace GameEngine
 			else SetFrame(1);
 		}
 
-		public abstract void SearchFood<T>(ref ICollection<T> gameObjects);
-		public abstract void MoveToFood<T>(ref ICollection<T> gameObjects);
+		protected void MoveRight()
+		{
+			dx = Speed;
+			dy = 0;
+		}
+		protected void MoveLeft()
+		{
+			dx = -Speed;
+			dy = 0;
+		}
+		protected void MoveUp()
+		{
+			dx = 0;
+			dy = -Speed;
+		}
+		protected void MoveDown()
+		{
+			dx = 0;
+			dy = Speed;
+		}
+
+		public virtual void SearchFood(ref ICollection<Creature> creatures)
+		{
+			long min;
+			if (Goal != null && creatures.Contains(Goal))
+				min = (GetCenterX() - Goal.GetCenterX()) * (GetCenterX() - Goal.GetCenterX())
+					+ (GetCenterY() - Goal.GetCenterY()) * (GetCenterY() - Goal.GetCenterY());
+			else
+			{
+				min = 1000000000;
+				Goal = null;
+			}
+			foreach (Creature gameObject in creatures)
+			{
+				//var obj = gameObject as Plant;
+				if (gameObject.GetType() == typeof(T))
+				{
+					long dist = (GetCenterX() - gameObject.GetCenterX()) * (GetCenterX() - gameObject.GetCenterX())
+						+ (GetCenterY() - gameObject.GetCenterY()) * (GetCenterY() - gameObject.GetCenterY());
+					if (dist <= searchRadius * searchRadius
+						&& dist < min)
+					{
+						Goal = gameObject;
+					}
+				}
+			}
+		}
+		public void MoveToFood(ref ICollection<Creature> creatures)
+		{
+			if ((GetCenterX() - Goal.GetCenterX()) * (GetCenterX() - Goal.GetCenterX())
+					+ (GetCenterY() - Goal.GetCenterY()) * (GetCenterY() - Goal.GetCenterY()) > 10)
+			{
+				if ((GetCenterX() - Goal.GetCenterX()) * (GetCenterX() - Goal.GetCenterX())
+					> (GetCenterY() - Goal.GetCenterY()) * (GetCenterY() - Goal.GetCenterY()))
+				{
+					if (GetCenterX() - Goal.GetCenterX() < 0)
+					{
+						dx = Speed;
+						dy = 0;
+						SetFrameIndex(2);
+					}
+					else if (GetCenterX() - Goal.GetCenterX() > 0)
+					{
+						dx = -Speed;
+						dy = 0;
+						SetFrameIndex(1);
+					}
+				}
+				else
+				{
+					if (GetCenterY() - Goal.GetCenterY() < 0)
+					{
+						dx = 0;
+						dy = Speed;
+						SetFrameIndex(0);
+
+					}
+					else if (GetCenterY() - Goal.GetCenterY() > 0)
+					{
+						dx = 0;
+						dy = -Speed;
+						SetFrameIndex(3);
+					}
+				}
+
+				NextFrame();
+			}
+			else
+			{
+				Satiety = 1;
+				foreach (Creature gameObj in creatures)
+				{
+					//var obj = gameObj as Plant;
+					if (Goal == gameObj)
+					{
+						gameObj.Visible = false;
+						break;
+					}
+				}
+				Goal = null;
+			}
+		}
 
 		public override void Draw(Graphics g)
 		{

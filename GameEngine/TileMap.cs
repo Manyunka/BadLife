@@ -36,7 +36,6 @@ namespace GameEngine
 		{
 			for (int x = 0; x < Row; x++)
 				for (int y = 0; y < Col; y++)
-					//if (TileData[x, y] > 0)
 					{
 						Rectangle rect = new Rectangle(x * Size, y * Size, Size, Size);
 						g.DrawImage(Tiles[TileData[x, y]].Bitmap, rect);

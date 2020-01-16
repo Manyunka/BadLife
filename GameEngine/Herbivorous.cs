@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace GameEngine
 {
-	public class Herbivorous : Animal
+	public class Herbivorous : Animal<Plant>
 	{
 		public Herbivorous(Bitmap bitmap, int width, int height) : base(bitmap, width, height)
 		{
 		}
 
-		public override void SearchFood<T>(ref ICollection<T> gameObjects)
+		/*public override void SearchFood(ref ICollection<Plant> gameObjects)
 		{
 			var objects = gameObjects as ICollection<Plant>;
 			long min;
@@ -25,20 +25,20 @@ namespace GameEngine
 				min = 1000000000;
 				Goal = null;
 			}
-			foreach (T gameObject in gameObjects)
+			foreach (Plant gameObject in gameObjects)
 			{
-				var obj = gameObject as Plant;
-				long dist = (GetCenterX() - obj.GetCenterX()) * (GetCenterX() - obj.GetCenterX())
-					+ (GetCenterY() - obj.GetCenterY()) * (GetCenterY() - obj.GetCenterY());
+				//var obj = gameObject as Plant;
+				long dist = (GetCenterX() - gameObject.GetCenterX()) * (GetCenterX() - gameObject.GetCenterX())
+					+ (GetCenterY() - gameObject.GetCenterY()) * (GetCenterY() - gameObject.GetCenterY());
 				if (dist <= searchRadius * searchRadius
 					&& dist < min)
 				{
-					Goal = obj;
+					Goal = gameObject;
 				}
 			}
-		}
+		}*/
 
-		public override void MoveToFood<T>(ref ICollection<T> gameObjects)
+		/*public override void MoveToFood(ref ICollection<Plant> gameObjects)
 		{
 			if ((GetCenterX() - Goal.GetCenterX()) * (GetCenterX() - Goal.GetCenterX())
 					+ (GetCenterY() - Goal.GetCenterY()) * (GetCenterY() - Goal.GetCenterY()) > 10)
@@ -81,10 +81,10 @@ namespace GameEngine
 			else
 			{
 				Satiety = 1;
-				foreach (T gameObj in gameObjects)
+				foreach (Plant gameObj in gameObjects)
 				{
-					var obj = gameObj as Plant;
-					if (Goal == obj)
+					//var obj = gameObj as Plant;
+					if (Goal == gameObj)
 					{
 						gameObjects.Remove(gameObj);
 						break;
@@ -92,6 +92,6 @@ namespace GameEngine
 				}
 				Goal = null;
 			}
-		}
+		}*/
 	}
 }

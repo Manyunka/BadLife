@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace GameEngine
 {
-	public class Predator : Animal<Herbivorous>
+	public class House : MapObject
 	{
-		public Predator(Bitmap bitmap, int width, int height) : base(bitmap, width, height)
+		public House(Bitmap bitmap) : base(bitmap)
 		{
-			Speed = 2;
-			searchRadius = 500;
+
 		}
 	}
 }
